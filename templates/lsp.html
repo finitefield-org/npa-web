@@ -1,0 +1,117 @@
+{{define "lsp_panels"}}
+<section id="lsp-panels" class="space-y-3 border p-3">
+  <h2 class="text-sm font-semibold">LSP payloads</h2>
+  <div class="grid gap-3 lg:grid-cols-3">
+    <section class="space-y-2">
+      <h3 class="text-xs font-semibold uppercase">Hover</h3>
+      <form class="flex gap-2" hx-post="/lsp/hover" hx-target="#lsp-hover-result" hx-swap="outerHTML">
+        <input type="hidden" name="session_id" value="{{.SessionId}}">
+        <input type="hidden" name="document_id" value="{{.DocumentId}}">
+        <input type="hidden" name="document_version" value="{{.DocumentVersion}}">
+        <input type="hidden" name="state_id" value="{{.StateId}}">
+        <input type="hidden" name="goal_id" value="{{.GoalId}}">
+        <label for="lsp-hover-name" class="sr-only">Hover theorem</label>
+        <input id="lsp-hover-name" name="hover_name" value="{{.HoverName}}" class="min-w-0 flex-1 border px-2 py-1 font-mono text-sm">
+        <button type="submit" class="border px-3 py-1">Hover</button>
+      </form>
+      {{template "lsp_hover_result" .Hover}}
+    </section>
+
+    <section class="space-y-2">
+      <h3 class="text-xs font-semibold uppercase">Completions</h3>
+      <form hx-post="/lsp/completions" hx-target="#lsp-completion-result" hx-swap="outerHTML">
+        <input type="hidden" name="session_id" value="{{.SessionId}}">
+        <input type="hidden" name="document_id" value="{{.DocumentId}}">
+        <input type="hidden" name="document_version" value="{{.DocumentVersion}}">
+        <input type="hidden" name="state_id" value="{{.StateId}}">
+        <input type="hidden" name="goal_id" value="{{.GoalId}}">
+        <input type="hidden" name="hover_name" value="{{.HoverName}}">
+        <button type="submit" class="border px-3 py-1">Completions</button>
+      </form>
+      {{template "lsp_completion_result" .Completions}}
+    </section>
+
+    <section class="space-y-2">
+      <h3 class="text-xs font-semibold uppercase">Code actions</h3>
+      <form hx-post="/lsp/code-actions" hx-target="#lsp-code-action-result" hx-swap="outerHTML">
+        <input type="hidden" name="session_id" value="{{.SessionId}}">
+        <input type="hidden" name="document_id" value="{{.DocumentId}}">
+        <input type="hidden" name="document_version" value="{{.DocumentVersion}}">
+        <input type="hidden" name="state_id" value="{{.StateId}}">
+        <input type="hidden" name="goal_id" value="{{.GoalId}}">
+        <input type="hidden" name="hover_name" value="{{.HoverName}}">
+        <button type="submit" class="border px-3 py-1">Code actions</button>
+      </form>
+      {{template "lsp_code_action_result" .CodeActions}}
+    </section>
+  </div>
+</section>
+{{end}}
+
+{{define "lsp_hover_result"}}
+<section id="lsp-hover-result" class="space-y-2">
+  <p class="text-sm">{{.Status}}</p>
+  {{if .TheoremName}}
+  <div class="space-y-1">
+    <p class="font-mono text-sm">{{.TheoremName}}</p>
+    <p class="text-xs">{{.Module}} / {{.Kind}}</p>
+    <pre class="whitespace-pre-wrap font-mono text-xs">{{.Statement}}</pre>
+    <p class="text-xs">attributes: {{.Attributes}}</p>
+    <p class="text-xs">axioms: {{.Axioms}}</p>
+    {{if .ExportHash}}
+    <code class="block break-all text-xs">export: {{.ExportHash}}</code>
+    {{end}}
+    {{if .CertificateHash}}
+    <code class="block break-all text-xs">certificate: {{.CertificateHash}}</code>
+    {{end}}
+    <code class="block break-all text-xs">interface: {{.DeclInterfaceHash}}</code>
+  </div>
+  {{end}}
+</section>
+{{end}}
+
+{{define "lsp_completion_result"}}
+<section id="lsp-completion-result" class="space-y-2">
+  <p class="text-sm">{{.Status}}</p>
+  {{if .Error}}
+  <p class="border px-2 py-1 text-sm" data-severity="error">{{.Error}}</p>
+  {{end}}
+  {{range .Items}}
+  <div class="space-y-1 border px-2 py-1">
+    <p class="font-mono text-sm">{{.Label}}</p>
+    <p class="text-xs">{{.Kind}} / {{.Detail}}</p>
+    {{if .InsertText}}
+    <code class="block break-all text-xs">insert: {{.InsertText}}</code>
+    {{end}}
+    {{if .Command}}
+    <code class="block break-all text-xs">command: {{.Command}}</code>
+    {{end}}
+  </div>
+  {{else}}
+  <p class="text-sm">No completion items.</p>
+  {{end}}
+</section>
+{{end}}
+
+{{define "lsp_code_action_result"}}
+<section id="lsp-code-action-result" class="space-y-2">
+  <p class="text-sm">{{.Status}}</p>
+  {{if .Error}}
+  <p class="border px-2 py-1 text-sm" data-severity="error">{{.Error}}</p>
+  {{end}}
+  {{range .Actions}}
+  <div class="space-y-1 border px-2 py-1">
+    <p class="font-mono text-sm">{{.Title}}</p>
+    <p class="text-xs">{{.Kind}} / diagnostics: {{.DiagnosticCount}}</p>
+    {{if .Tactic}}
+    <code class="block break-all text-xs">tactic: {{.Tactic}}</code>
+    {{end}}
+    {{if .Command}}
+    <code class="block break-all text-xs">command: {{.Command}}</code>
+    {{end}}
+  </div>
+  {{else}}
+  <p class="text-sm">No code actions.</p>
+  {{end}}
+</section>
+{{end}}

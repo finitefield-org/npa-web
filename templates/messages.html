@@ -1,0 +1,9 @@
+{{define "messages"}}
+<section id="messages" class="space-y-2">
+  {{range .Items}}
+  <p class="border px-2 py-1 text-sm" data-severity="{{.Severity}}">{{.Text}}</p>
+  {{else}}
+  <p class="text-sm">No messages.</p>
+  {{end}}
+</section>
+{{end}}

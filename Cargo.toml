@@ -1,0 +1,27 @@
+[workspace]
+members = ["."]
+resolver = "2"
+
+[package]
+name = "npa-web"
+version = "0.2.0"
+edition = "2021"
+license = "Apache-2.0"
+repository = "https://github.com/finitefield-org/npa-web"
+
+[dependencies]
+npa-api = { path = "../npa-core/crates/npa-api" }
+npa-cert = { path = "../npa-core/crates/npa-cert" }
+npa-cli = { path = "../npa-core/crates/npa-cli" }
+npa-frontend = { path = "../npa-core/crates/npa-frontend" }
+npa-tactic = { path = "../npa-core/crates/npa-tactic" }
+
+axum = "0.8"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net"] }
+go_html_template = "0.2"
+ironframe = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }

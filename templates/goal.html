@@ -1,0 +1,23 @@
+{{define "goal"}}
+<section id="goal-panel" class="space-y-3 border p-3">
+  <h2 class="text-sm font-semibold">Proof state</h2>
+  {{if .HasGoal}}
+  <div class="space-y-2">
+    <div class="text-xs uppercase">{{.Label}}</div>
+    <dl class="space-y-1">
+      {{range .Context}}
+      <div class="grid grid-cols-[8rem_1fr] gap-2">
+        <dt class="font-mono text-sm">{{.Name}}</dt>
+        <dd class="font-mono text-sm">{{.Ty}}</dd>
+      </div>
+      {{else}}
+      <div class="text-sm">No local hypotheses.</div>
+      {{end}}
+    </dl>
+    <pre class="whitespace-pre-wrap border-t pt-2 font-mono text-sm">{{.Target}}</pre>
+  </div>
+  {{else}}
+  <p class="text-sm">No active goal.</p>
+  {{end}}
+</section>
+{{end}}

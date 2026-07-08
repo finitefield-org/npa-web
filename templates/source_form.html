@@ -1,0 +1,25 @@
+{{define "source_form"}}
+<form id="source-panel" class="space-y-3" hx-post="/sessions" hx-target="#workspace" hx-swap="outerHTML">
+  <div>
+    <label for="demo-mode" class="block text-sm font-medium">Demo</label>
+    <select id="demo-mode" name="demo" class="w-full border px-2 py-1" hx-get="/demos/select" hx-target="#source-panel" hx-swap="outerHTML">
+      {{range .Demos}}
+      <option value="{{.Value}}"{{if .Selected}} selected{{end}}>{{.Label}}</option>
+      {{end}}
+    </select>
+  </div>
+  <div>
+    <label for="module-name" class="block text-sm font-medium">Module</label>
+    <input id="module-name" name="module" value="{{.ModuleName}}" class="w-full border px-2 py-1">
+  </div>
+  <div>
+    <label for="theorem-name" class="block text-sm font-medium">Theorem</label>
+    <input id="theorem-name" name="theorem" value="{{.TheoremName}}" class="w-full border px-2 py-1">
+  </div>
+  <div>
+    <label for="source" class="block text-sm font-medium">Source</label>
+    <textarea id="source" name="source" rows="18" class="w-full border font-mono text-sm">{{.Source}}</textarea>
+  </div>
+  <button type="submit" class="border px-3 py-1">Create session</button>
+</form>
+{{end}}

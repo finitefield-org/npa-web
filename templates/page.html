@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Title}}</title>
+  <link rel="stylesheet" href="/assets/app.css">
+  <script src="/assets/htmx.min.js" defer></script>
+</head>
+<body class="npa-theme">
+  <header class="border-b px-4 py-3">
+    <h1 class="text-lg font-semibold">NPA Web</h1>
+  </header>
+
+  <main class="space-y-4 p-4">
+    <section class="grid gap-4 lg:grid-cols-2">
+      {{template "source_form" .SourceForm}}
+      {{template "workspace" .Workspace}}
+    </section>
+    {{template "package_fixture" .PackageFixture}}
+  </main>
+</body>
+</html>

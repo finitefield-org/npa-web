@@ -1,0 +1,26 @@
+{{define "verify"}}
+<section id="verify" class="space-y-2 border p-3">
+  <h2 class="text-sm font-semibold">Verify</h2>
+  <p class="text-sm">{{.Status}}</p>
+  <p class="text-sm">{{.Detail}}</p>
+  {{if .RootDeclCertificateHash}}
+  <code class="block break-all text-xs">root declaration: {{.RootDeclCertificateHash}}</code>
+  {{end}}
+  {{if .CertificateHash}}
+  <code class="block break-all text-xs">module: {{.CertificateHash}}</code>
+  {{end}}
+  {{if .Imports}}
+  <div class="space-y-2 border-t pt-2">
+    <h3 class="text-xs font-semibold uppercase">Imports</h3>
+    {{range .Imports}}
+    <div class="space-y-1">
+      <p class="font-mono text-sm">{{.Module}}</p>
+      <code class="block break-all text-xs">export: {{.ExportHash}}</code>
+      <code class="block break-all text-xs">certificate: {{.CertificateHash}}</code>
+      <p class="text-xs">axioms: {{.AxiomCount}}</p>
+    </div>
+    {{end}}
+  </div>
+  {{end}}
+</section>
+{{end}}

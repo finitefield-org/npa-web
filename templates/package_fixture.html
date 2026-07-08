@@ -1,0 +1,53 @@
+{{define "package_fixture"}}
+<section id="package-fixture-panel" class="space-y-3 border p-3">
+  <h2 class="text-sm font-semibold">Package fixture</h2>
+  <form id="package-fixture-form" class="flex gap-2" hx-post="/package-fixtures/run" hx-target="#package-fixture-result" hx-swap="outerHTML">
+    <label for="package-fixture" class="sr-only">Package fixture</label>
+    <select id="package-fixture" name="fixture" class="min-w-0 flex-1 border px-2 py-1">
+      {{range .Options}}
+      {{if .Selected}}
+      <option value="{{.Value}}" selected>{{.Label}}</option>
+      {{else}}
+      <option value="{{.Value}}">{{.Label}}</option>
+      {{end}}
+      {{end}}
+    </select>
+    <button type="submit" class="border px-3 py-1">Run package check</button>
+  </form>
+  {{template "package_fixture_result" .Result}}
+</section>
+{{end}}
+
+{{define "package_fixture_result"}}
+<section id="package-fixture-result" class="space-y-3">
+  <div class="space-y-1">
+    <p class="text-sm">{{.Status}}</p>
+    {{if .FixtureLabel}}
+    <p class="font-mono text-sm">{{.FixtureLabel}}</p>
+    {{end}}
+    {{if .Root}}
+    <code class="block break-all text-xs">{{.Root}}</code>
+    {{end}}
+  </div>
+
+  <div class="space-y-2">
+    {{range .Steps}}
+    <div class="grid grid-cols-[10rem_1fr_6rem] gap-2 border px-2 py-1 text-sm">
+      <span class="font-mono">{{.Command}}</span>
+      <span>{{.Status}}</span>
+      <span>{{.DiagnosticCount}} diagnostics</span>
+    </div>
+    {{end}}
+  </div>
+
+  <div class="space-y-2 border-t pt-2">
+    <h3 class="text-xs font-semibold uppercase">Diagnostics (untrusted metadata)</h3>
+    {{range .Diagnostics}}
+    <div class="space-y-1 border px-2 py-1" data-severity="{{.Severity}}">
+      <p class="text-xs">{{.Command}} / {{.Kind}} / {{.Reason}}</p>
+      <p class="font-mono text-xs">{{.Detail}}</p>
+    </div>
+    {{end}}
+  </div>
+</section>
+{{end}}
